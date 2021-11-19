@@ -11,7 +11,6 @@ assert "Cookie" in driver.title
 
 # -------------- Find and save essential UI elements -------------- #
 cookie = driver.find_element(By.ID, "cookie")
-cookieCount = driver.find_element(By.ID, "money")
 cursor = driver.find_element(By.ID, "buyCursor")
 grandma = driver.find_element(By.ID, "buyGrandma")
 factory = driver.find_element(By.ID, "buyFactory")
@@ -24,6 +23,12 @@ shop = [timeMachine, portal, alchemy, shipment, mine, factory, grandma, cursor]
 
 
 # -------------- Cookie clicker functions -------------- #
+def get_money():
+    # Parses the text field of "money" to get cookies per second
+    txt = driver.find_element(By.ID, "money").text
+    return int(txt.strip(","))
+
+
 def get_cps():
     # Parses the text field of "cps" to get cookies per second
     txt = driver.find_element(By.ID, "cps").text
@@ -52,8 +57,8 @@ def get_price(item):
 
 
 def upgrade():
-    # Finds the item with highest base price, then attempts to buy 3 copies.
-    money = int(cookieCount.text)
+    # Finds the item with highest base price, then attempts to buy it.
+    money = get_money()
     for item in shop:
         if get_price(item) <= money:
             item.click()
@@ -74,7 +79,6 @@ while True:
         upgrade()
         # Refresh page elements after upgrade
         cookie = driver.find_element(By.ID, "cookie")
-        cookieCount = driver.find_element(By.ID, "money")
         cursor = driver.find_element(By.ID, "buyCursor")
         grandma = driver.find_element(By.ID, "buyGrandma")
         factory = driver.find_element(By.ID, "buyFactory")
@@ -86,7 +90,7 @@ while True:
         shop = [timeMachine, portal, alchemy, shipment, mine, factory, grandma, cursor]
         # Reset cycle
         cycle = 0
-        if get_cps() >= 5:
+        if get_cps() >= 500:
             print("CPS exceeds chosen limit. Program will no longer click.")
             break
 
@@ -97,7 +101,6 @@ while True:
     upgrade()
     # Refresh page elements after upgrade
     cookie = driver.find_element(By.ID, "cookie")
-    cookieCount = driver.find_element(By.ID, "money")
     cursor = driver.find_element(By.ID, "buyCursor")
     grandma = driver.find_element(By.ID, "buyGrandma")
     factory = driver.find_element(By.ID, "buyFactory")
