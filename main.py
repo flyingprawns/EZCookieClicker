@@ -24,40 +24,66 @@ shop = [timeMachine, portal, alchemy, shipment, mine, factory, grandma, cursor]
 
 
 # -------------- Cookie clicker functions -------------- #
-def get_price(item):
-    # Parses the text field of an item and returns its price.
+def get_cps():
+    # Parses the text field of "cps" to get cookies per second
+    txt = driver.find_element(By.ID, "cps").text
     num_found = False
-    p = ""
-    for char in item.text:
+    ans = ""
+    for char in txt:
         if char.isnumeric():
-            p += char
+            ans += char
             num_found = True
         elif num_found and char != ",":
             break
-    return int(p)
+    return int(ans)
+
+
+def get_price(item):
+    # Parses the text field of an item and returns its price.
+    num_found = False
+    ans = ""
+    for char in item.text:
+        if char.isnumeric():
+            ans += char
+            num_found = True
+        elif num_found and char != ",":
+            break
+    return int(ans)
 
 
 def upgrade():
+    # Finds the item with highest base price, then attempts to buy 3 copies.
     money = int(cookieCount.text)
     for item in shop:
         if get_price(item) <= money:
             item.click()
             item.click()
+            item.click()
             return
 
 
-# -------------- Play the game -------------- #
-CLICK_INTERVAL = 0.00001
-CYCLES_TIL_UPGRADE = 501
+# -------------- Before 500 cookies/s is reached -------------- #
+click_interval = 0.00001
+cycles_til_upgrade = 300
 cycle = 0
 while True:
     # Click on cookie
-    time.sleep(CLICK_INTERVAL)
+    time.sleep(click_interval)
     cookie.click()
     # Occasionally check for upgrades
     cycle += 1
-    if cycle >= CYCLES_TIL_UPGRADE:
-        print("5s has passed")
+    if cycle >= cycles_til_upgrade:
+        upgrade()
+        cookie = driver.find_element(By.ID, "cookie")
         cycle = 0
+        if get_cps() >= 5:
+            print("CPS exceeds chosen limit. Program will no longer click.")
+            break
 
-upgrade()
+# -------------- After 500 cookies/s is reached -------------- #
+UPGRADE_INTERVAL = 8
+while True:
+    time.sleep(UPGRADE_INTERVAL)
+    upgrade()
+
+# TODO: stale element error. cookie disappears after an upgrade is executed and clicks dont work anymore.
