@@ -57,8 +57,6 @@ def upgrade():
     for item in shop:
         if get_price(item) <= money:
             item.click()
-            item.click()
-            item.click()
             return
 
 
@@ -74,7 +72,19 @@ while True:
     cycle += 1
     if cycle >= cycles_til_upgrade:
         upgrade()
+        # Refresh page elements after upgrade
         cookie = driver.find_element(By.ID, "cookie")
+        cookieCount = driver.find_element(By.ID, "money")
+        cursor = driver.find_element(By.ID, "buyCursor")
+        grandma = driver.find_element(By.ID, "buyGrandma")
+        factory = driver.find_element(By.ID, "buyFactory")
+        mine = driver.find_element(By.ID, "buyMine")
+        shipment = driver.find_element(By.ID, "buyShipment")
+        alchemy = driver.find_element(By.ID, "buyAlchemy lab")
+        portal = driver.find_element(By.ID, "buyPortal")
+        timeMachine = driver.find_element(By.ID, "buyTime machine")
+        shop = [timeMachine, portal, alchemy, shipment, mine, factory, grandma, cursor]
+        # Reset cycle
         cycle = 0
         if get_cps() >= 5:
             print("CPS exceeds chosen limit. Program will no longer click.")
@@ -85,5 +95,15 @@ UPGRADE_INTERVAL = 8
 while True:
     time.sleep(UPGRADE_INTERVAL)
     upgrade()
-
-# TODO: stale element error. cookie disappears after an upgrade is executed and clicks dont work anymore.
+    # Refresh page elements after upgrade
+    cookie = driver.find_element(By.ID, "cookie")
+    cookieCount = driver.find_element(By.ID, "money")
+    cursor = driver.find_element(By.ID, "buyCursor")
+    grandma = driver.find_element(By.ID, "buyGrandma")
+    factory = driver.find_element(By.ID, "buyFactory")
+    mine = driver.find_element(By.ID, "buyMine")
+    shipment = driver.find_element(By.ID, "buyShipment")
+    alchemy = driver.find_element(By.ID, "buyAlchemy lab")
+    portal = driver.find_element(By.ID, "buyPortal")
+    timeMachine = driver.find_element(By.ID, "buyTime machine")
+    shop = [timeMachine, portal, alchemy, shipment, mine, factory, grandma, cursor]
