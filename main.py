@@ -26,7 +26,7 @@ shop = [timeMachine, portal, alchemy, shipment, mine, factory, grandma, cursor]
 def get_money():
     # Parses the text field of "money" to get cookies per second
     txt = driver.find_element(By.ID, "money").text
-    return int(txt.strip(","))
+    return int(txt.replace(",", ""))
 
 
 def get_cps():
