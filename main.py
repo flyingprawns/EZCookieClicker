@@ -57,12 +57,45 @@ def get_price(item):
 
 
 def upgrade():
+    # Refresh page elements before upgrade
+    global cookie
+    global cursor
+    global grandma
+    global factory
+    global mine
+    global shipment
+    global alchemy
+    global portal
+    global timeMachine
+    global shop
+    cookie = driver.find_element(By.ID, "cookie")
+    cursor = driver.find_element(By.ID, "buyCursor")
+    grandma = driver.find_element(By.ID, "buyGrandma")
+    factory = driver.find_element(By.ID, "buyFactory")
+    mine = driver.find_element(By.ID, "buyMine")
+    shipment = driver.find_element(By.ID, "buyShipment")
+    alchemy = driver.find_element(By.ID, "buyAlchemy lab")
+    portal = driver.find_element(By.ID, "buyPortal")
+    timeMachine = driver.find_element(By.ID, "buyTime machine")
+    shop = [timeMachine, portal, alchemy, shipment, mine, factory, grandma, cursor]
     # Finds the item with highest base price, then attempts to buy it.
     money = get_money()
     for item in shop:
         if get_price(item) <= money:
             item.click()
-            return
+            break
+    # Refresh page elements after upgrade
+    cookie = driver.find_element(By.ID, "cookie")
+    cursor = driver.find_element(By.ID, "buyCursor")
+    grandma = driver.find_element(By.ID, "buyGrandma")
+    factory = driver.find_element(By.ID, "buyFactory")
+    mine = driver.find_element(By.ID, "buyMine")
+    shipment = driver.find_element(By.ID, "buyShipment")
+    alchemy = driver.find_element(By.ID, "buyAlchemy lab")
+    portal = driver.find_element(By.ID, "buyPortal")
+    timeMachine = driver.find_element(By.ID, "buyTime machine")
+    shop = [timeMachine, portal, alchemy, shipment, mine, factory, grandma, cursor]
+    return
 
 
 # -------------- Before 500 cookies/s is reached -------------- #
@@ -77,17 +110,6 @@ while True:
     cycle += 1
     if cycle >= cycles_til_upgrade:
         upgrade()
-        # Refresh page elements after upgrade
-        cookie = driver.find_element(By.ID, "cookie")
-        cursor = driver.find_element(By.ID, "buyCursor")
-        grandma = driver.find_element(By.ID, "buyGrandma")
-        factory = driver.find_element(By.ID, "buyFactory")
-        mine = driver.find_element(By.ID, "buyMine")
-        shipment = driver.find_element(By.ID, "buyShipment")
-        alchemy = driver.find_element(By.ID, "buyAlchemy lab")
-        portal = driver.find_element(By.ID, "buyPortal")
-        timeMachine = driver.find_element(By.ID, "buyTime machine")
-        shop = [timeMachine, portal, alchemy, shipment, mine, factory, grandma, cursor]
         # Reset cycle
         cycle = 0
         if get_cps() >= 500:
@@ -99,14 +121,3 @@ UPGRADE_INTERVAL = 8
 while True:
     time.sleep(UPGRADE_INTERVAL)
     upgrade()
-    # Refresh page elements after upgrade
-    cookie = driver.find_element(By.ID, "cookie")
-    cursor = driver.find_element(By.ID, "buyCursor")
-    grandma = driver.find_element(By.ID, "buyGrandma")
-    factory = driver.find_element(By.ID, "buyFactory")
-    mine = driver.find_element(By.ID, "buyMine")
-    shipment = driver.find_element(By.ID, "buyShipment")
-    alchemy = driver.find_element(By.ID, "buyAlchemy lab")
-    portal = driver.find_element(By.ID, "buyPortal")
-    timeMachine = driver.find_element(By.ID, "buyTime machine")
-    shop = [timeMachine, portal, alchemy, shipment, mine, factory, grandma, cursor]
